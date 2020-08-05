@@ -9,9 +9,7 @@ namespace TaskNUnitTest
     /// <summary>Testing methods of <see cref="Server"/> class</summary>
     public class ServerNUnitTests
     {
-        /// <summary>
-        /// Testing <see cref="Server.BroadcastMessage(string)"/>
-        /// </summary>
+        /// <summary>Testing <see cref="Server.BroadcastMessage(string)"/ method></summary>
         /// <param name="serverLocalHostIp">Server IP address</param>
         /// <param name="serverPort">Server port number</param>
         /// <param name="actualMessage">Message in Russian</param>
