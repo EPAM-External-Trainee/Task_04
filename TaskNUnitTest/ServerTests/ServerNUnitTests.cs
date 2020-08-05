@@ -3,7 +3,6 @@ using Chat.Models.ClientSide.MessageTranslator;
 using Chat.Models.ServerSide;
 using NUnit.Framework;
 using System.Net.Sockets;
-using System.Threading;
 
 namespace TaskNUnitTest
 {
@@ -21,10 +20,7 @@ namespace TaskNUnitTest
                 Assert.AreEqual(expectedMessage, traslator.TranslateMessage(actualMessage));
             };
 
-            new Thread(new ThreadStart(client.EnterChat)).Start();
-            new Thread(new ThreadStart(client.EnterChat)).Start();
-
-            server.BroadcastMessage(expectedMessage);
+            server.BroadcastMessage(expectedMessage);       
         }
     }
 }

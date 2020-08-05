@@ -27,29 +27,19 @@ namespace Chat.Models.ServerSide
 
         public void Listen()
         {
-            try
+            while (true)
             {
-                while (true)
-                {
-                    TcpClient tcpClient = _server.AcceptTcpClient();
-                    _tcpClients.Add(tcpClient);
+                TcpClient tcpClient = _server.AcceptTcpClient();
+                _tcpClients.Add(tcpClient);
 
-                    ThreadForWorkWithClient = new Thread(Process);
-                    ThreadForWorkWithClient.Start(tcpClient);
-                }
-            }
-            catch(SocketException exc)
-            {
-                if(exc.SocketErrorCode == SocketError.Interrupted)
-                {
-                    _server.Stop();
-                }
+                ThreadForWorkWithClient = new Thread(Process);
+                ThreadForWorkWithClient.Start(tcpClient);
             }
         }
 
-        public void Process(dynamic tmp)
+        public void Process(dynamic tcpClient)
         {
-            using var client = tmp as TcpClient;
+            using var client = tcpClient as TcpClient;
             NetworkStream = client?.GetStream();
             string message;
 

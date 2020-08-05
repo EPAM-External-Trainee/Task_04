@@ -21,12 +21,14 @@ namespace Chat.Models.ClientSide
 
             ThreadForWorkWithClient = new Thread(ReceiveMessage);
             ThreadForWorkWithClient.Start();
+
+            new Thread(new ThreadStart(EnterChat)).Start();
         }
 
         public void SendMessage(string message)
         {
             byte[] data = Encoding.Unicode.GetBytes(message);
-            _client.GetStream().Write(data, 0, data.Length);
+            _client?.GetStream().Write(data, 0, data.Length);
         }
 
         public void EnterChat()
@@ -52,17 +54,10 @@ namespace Chat.Models.ClientSide
                         bytes = NetworkStream.Read(data, 0, data.Length);
                         builder.Append(Encoding.Unicode.GetString(data, 0, bytes));
                     }
-
                 }
                 while (NetworkStream.DataAvailable);
                 MessageRecived?.Invoke(_client, builder.ToString());
             }
-        }
-
-        void Disconnect()
-        {
-            NetworkStream?.Close();
-            _client?.Close();
         }
     }
 }

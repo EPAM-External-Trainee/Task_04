@@ -3,7 +3,6 @@ using Chat.Models.ServerSide;
 using Chat.Models.ServerSide.MessageStore;
 using NUnit.Framework;
 using System.Linq;
-using System.Threading;
 
 namespace TaskNUnitTest.ClientTests
 {
@@ -22,9 +21,6 @@ namespace TaskNUnitTest.ClientTests
                 messageStorage.AddMessage(client, message);
                 Assert.AreEqual(expectedMessage, messageStorage.AllClientMessages.First());
             };
-
-            new Thread(new ThreadStart(chatClient.EnterChat)).Start();
-            new Thread(new ThreadStart(chatClient.EnterChat)).Start();
 
             chatClient.SendMessage(expectedMessage);
         }
