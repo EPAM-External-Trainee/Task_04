@@ -3,6 +3,7 @@ using NUnit.Framework;
 
 namespace TaskNUnitTest.TranslatorTests
 {
+    /// <summary>Testing methods of <see cref="Translator"/> class</summary>
     class TranslatorNUnitTests
     {
         private readonly Translator translator = new Translator();

@@ -7,13 +7,24 @@ using System.Threading;
 
 namespace Chat.Models.ServerSide
 {
+    /// <summary>Сlass that describes the TCP server functionality</summary>
     public class Server : NetworkNode
     {
+        /// <summary>Field for storing <see cref="TcpListener"/> object</summary>
         private TcpListener _server;
+
+        /// <summary>Field for storing connected <see cref="TcpClient"/>'s</summary>
         private List<TcpClient> _tcpClients;
-        private Thread _threadForServerWork;
+
+        /// <summary>Field for storing <see cref="Thread"/> that will be used to listen for incoming connection requests</summary>
+        private Thread _threadForListeningProcess;
+
+        /// <summary><inheritdoc cref="NetworkNode.MessageRecived"/></summary>
         public override event Action<TcpClient, string> MessageRecived;
 
+        /// <summary><inheritdoc cref="NetworkNode.NetworkNode(string, int)"/></summary>
+        /// <param name="localHostIp"></param>
+        /// <param name="localHostPort"></param>
         public Server(string localHostIp, int localHostPort) : base(localHostIp, localHostPort)
         {
             _server = new TcpListener(LocalHostIP, LocalHostPort);
@@ -21,23 +32,30 @@ namespace Chat.Models.ServerSide
 
             _tcpClients = new List<TcpClient>();
 
-            _threadForServerWork = new Thread(Listen);
-            _threadForServerWork.Start();
+            _threadForListeningProcess = new Thread(ListeningProcess);
+            _threadForListeningProcess.Start();
         }
 
-        public void Listen()
+        /// <summary>Method for listening for incoming connection requests</summary>
+        /// <remarks>Executed in <see cref="_threadForListeningProcess"/></remarks>
+        public void ListeningProcess()
         {
             while (true)
             {
                 TcpClient tcpClient = _server.AcceptTcpClient();
                 _tcpClients.Add(tcpClient);
 
-                ThreadForWorkWithClient = new Thread(Process);
-                ThreadForWorkWithClient.Start(tcpClient);
+                ThreadForReceivingMessages = new Thread(MessageReceivingProcess);
+                ThreadForReceivingMessages.Start(tcpClient);
             }
         }
 
-        public void Process(dynamic tcpClient)
+        /// <summary>
+        /// Receiving messages from clients
+        /// </summary>
+        /// <param name="tcpClient">The client from which the message is received</param>
+        /// <remarks>Executed in <see cref="NetworkNode.ThreadForReceivingMessages"/></remarks>
+        public void MessageReceivingProcess(dynamic tcpClient)
         {
             using var client = tcpClient as TcpClient;
             NetworkStream = client?.GetStream();
@@ -49,6 +67,10 @@ namespace Chat.Models.ServerSide
             }
         }
 
+        /// <summary>
+        /// Getting a message from <see cref="NetworkNode.NetworkStream"/>/// </summary>
+        /// <param name="client"></param>
+        /// <returns>Received message</returns>
         private string GetMessage(TcpClient client)
         {
             var builder = new StringBuilder();
@@ -67,6 +89,10 @@ namespace Chat.Models.ServerSide
             return builder.ToString();
         }
 
+        /// <summary>
+        /// Sending a message to all server clients
+        /// </summary>
+        /// <param name="message">Send messages</param>
         public void BroadcastMessage(string message)
         {
             if(_tcpClients.Count > 0)

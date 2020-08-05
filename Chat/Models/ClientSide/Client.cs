@@ -6,12 +6,16 @@ using System.Threading;
 
 namespace Chat.Models.ClientSide
 {
+    /// <summary>Сlass that describes the TCP client functionality</summary>
     public class Client : NetworkNode
     {
+        /// <summary>Field for storing <see cref="TcpClient"/> object</summary>
         private TcpClient _client;
 
+        /// <summary><inheritdoc cref="NetworkNode.MessageRecived"/></summary>
         public override event Action<TcpClient, string> MessageRecived;
 
+        /// <summary><inheritdoc cref="NetworkNode.NetworkNode(string, int)"/></summary>
         public Client(string localHostIp, int localHostPort) : base(localHostIp, localHostPort)
         {
             _client = new TcpClient();
@@ -19,28 +23,21 @@ namespace Chat.Models.ClientSide
 
             NetworkStream = _client.GetStream();
 
-            ThreadForWorkWithClient = new Thread(ReceiveMessage);
-            ThreadForWorkWithClient.Start();
-
-            new Thread(new ThreadStart(EnterChat)).Start();
+            ThreadForReceivingMessages = new Thread(MessageReceivingProcess);
+            ThreadForReceivingMessages.Start();
         }
 
+        /// <summary>Sending a message to the server</summary>
+        /// <param name="message">Send message</param>
         public void SendMessage(string message)
         {
             byte[] data = Encoding.Unicode.GetBytes(message);
             _client?.GetStream().Write(data, 0, data.Length);
         }
 
-        public void EnterChat()
-        {
-            string message = "";
-            while (true)
-            {
-                SendMessage(message);
-            }
-        }
-
-        public void ReceiveMessage()
+        /// <summary>Receiving a message from the server</summary>
+        /// <remarks>Executed in <see cref="NetworkNode.ThreadForReceivingMessages"/>thread</remarks>
+        public void MessageReceivingProcess()
         {
             while (true)
             {
@@ -54,6 +51,7 @@ namespace Chat.Models.ClientSide
                         bytes = NetworkStream.Read(data, 0, data.Length);
                         builder.Append(Encoding.Unicode.GetString(data, 0, bytes));
                     }
+
                 }
                 while (NetworkStream.DataAvailable);
                 MessageRecived?.Invoke(_client, builder.ToString());

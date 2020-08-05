@@ -6,6 +6,7 @@ using System.Net.Sockets;
 
 namespace TaskNUnitTest
 {
+    /// <summary>Testing methods of <see cref="Server"/> class</summary>
     public class ServerNUnitTests
     {
         [TestCase("127.0.0.2", 8888, "Я знаю отличную шутку про TCP, но если она до вас не дойдет, то я повторю.", "Ya znayu otlichnuyu shutku pro TCP, no esli ona do vas ne dojdet, to ya povtoryu.")]

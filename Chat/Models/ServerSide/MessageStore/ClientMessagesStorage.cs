@@ -4,8 +4,12 @@ using System.Net.Sockets;
 
 namespace Chat.Models.ServerSide.MessageStore
 {
-    public class ClientsMessageStorage : Dictionary<TcpClient, List<string>>
+    /// <summary>Class that describes how to store client messages</summary>
+    public class ClientMessagesStorage : Dictionary<TcpClient, List<string>>
     {
+        /// <summary>Adding a message to the <see cref="Dictionary{TKey, TValue}"/> storage</summary>
+        /// <param name="tcpClient">The client whose message will be added</param>
+        /// <param name="message">Message to add</param>
         public void AddMessage(TcpClient tcpClient, string message)
         {
             if(TryGetValue(tcpClient, out var value))
@@ -17,6 +21,7 @@ namespace Chat.Models.ServerSide.MessageStore
             Add(tcpClient, new List<string> { message });
         }
 
+        /// <summary>Getting all client messages</summary>
         public List<string> AllClientMessages => this?.SelectMany(pair => pair.Value).ToList();
     }
 }

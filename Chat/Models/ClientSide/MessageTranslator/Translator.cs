@@ -6,8 +6,10 @@ using System.Text.RegularExpressions;
 
 namespace Chat.Models.ClientSide.MessageTranslator
 {
+    /// <summary>Сlass that describes the ability to translate one message to another using some <see cref="Language"/> languages</summary>
     public class Translator : Dictionary<string, string>
     {
+        /// <summary>Creates a new instance by filling in the dictionary with the necessary data</summary>
         public Translator()
         {
             Add("а", "a");
@@ -91,8 +93,14 @@ namespace Chat.Models.ClientSide.MessageTranslator
             Add("}", "}");
         }
 
+        /// <summary>Detecting the language from an incoming message</summary>
+        /// <param name="message">The message to define the language for</param>
+        /// <returns>Current language</returns>
         private Language LanguageDefinition(string message) => !Regex.IsMatch(message, @"\P{IsBasicLatin}") ? Language.English : Language.Russian;
 
+        /// <summary>Translating a message from one <see cref="Language"/> language to another</summary>
+        /// <param name="message">The message you want to translate</param>
+        /// <returns>Translated message</returns>
         public string TranslateMessage(string message)
         {
             var builderString = new StringBuilder(message);
