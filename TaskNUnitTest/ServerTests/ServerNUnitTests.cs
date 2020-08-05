@@ -24,7 +24,7 @@ namespace TaskNUnitTest
             new Thread(new ThreadStart(client.EnterChat)).Start();
             new Thread(new ThreadStart(client.EnterChat)).Start();
 
-            server.SendMessage(expectedMessage);
+            server.BroadcastMessage(expectedMessage);
         }
     }
 }

@@ -59,10 +59,10 @@ namespace Chat.Models.ClientSide
             }
         }
 
-        //void Disconnect()
-        //{
-        //    _stream?.Close();
-        //    _client?.Close();
-        //}
+        void Disconnect()
+        {
+            NetworkStream?.Close();
+            _client?.Close();
+        }
     }
 }
