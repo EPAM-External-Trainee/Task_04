@@ -27,13 +27,23 @@ namespace Chat.Models.ServerSide
 
         public void Listen()
         {
-            while (true)
+            try
             {
-                TcpClient tcpClient = _server.AcceptTcpClient();
-                _tcpClients.Add(tcpClient);
+                while (true)
+                {
+                    TcpClient tcpClient = _server.AcceptTcpClient();
+                    _tcpClients.Add(tcpClient);
 
-                ThreadForWorkWithClient = new Thread(Process);
-                ThreadForWorkWithClient.Start(tcpClient);
+                    ThreadForWorkWithClient = new Thread(Process);
+                    ThreadForWorkWithClient.Start(tcpClient);
+                }
+            }
+            catch(SocketException exc)
+            {
+                if(exc.SocketErrorCode == SocketError.Interrupted)
+                {
+                    _server.Stop();
+                }
             }
         }
 
@@ -67,21 +77,6 @@ namespace Chat.Models.ServerSide
             return builder.ToString();
         }
 
-        //public void BroadcastMessage(string message, string id)
-        //{
-        //    byte[] data = Encoding.Unicode.GetBytes(message);
-        //    //var client = clients.FirstOrDefault(c => c.Id == id);
-        //    //client?.Stream.Write(data, 0, data.Length);
-
-        //    for (int i = 0; i < clients.Count; i++)
-        //    {
-        //        if (clients[i].Id != id) // если id клиента не равно id отправляющего
-        //        {
-        //            clients[i].Stream.Write(data, 0, data.Length); //передача данных
-        //        }
-        //    }
-        //}
-
         public void BroadcastMessage(string message)
         {
             if(_tcpClients.Count > 0)
@@ -95,22 +90,5 @@ namespace Chat.Models.ServerSide
             }
             throw new Exception("Сurrently there are no connected clients on the server");
         }
-
-        public void DisconnectAllClientsFromServer()
-        {
-            _tcpClients.ForEach(c => c.Close());
-        }
-
-        public void StopServer()
-        {
-            if(_tcpClients.Count > 0)
-            {
-                DisconnectAllClientsFromServer();
-            }
-
-            _server.Stop();
-        }
-
-        public void StartServer() => _server.Start();
     }
 }
