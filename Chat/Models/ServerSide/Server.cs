@@ -10,16 +10,14 @@ namespace Chat.Models.ServerSide
 {
     public class Server : NetworkNode
     {
-        private const int _streamBufferSize = 64;
         private TcpListener _tcpListener;
         private List<TcpClient> _tcpClients;
         private Thread _threadForServerWork;
-        private Thread _threadForClienWork;
-        private NetworkStream _networkStream;
+        public override event Action<TcpClient, string> MessageRecived;
 
         public Server(string localHostIp, int localHostPort) : base(localHostIp, localHostPort)
         {
-            _tcpListener = new TcpListener(IPAddress.Parse(LocalHostIp), LocalHostPort);
+            _tcpListener = new TcpListener(IPAddress.Parse(LocalHostIP), LocalHostPort);
             _tcpClients = new List<TcpClient>();
 
             _tcpListener.Start();
@@ -28,8 +26,6 @@ namespace Chat.Models.ServerSide
             _threadForServerWork.Start();
         }
 
-        public event Action<TcpClient, string> RecivedMessage;
-
         public void Listen()
         {
             while (true)
@@ -37,15 +33,15 @@ namespace Chat.Models.ServerSide
                 TcpClient tcpClient = _tcpListener.AcceptTcpClient();
                 _tcpClients.Add(tcpClient);
 
-                _threadForClienWork = new Thread(Process);
-                _threadForClienWork.Start(tcpClient);
+                ThreadForClienWork = new Thread(Process);
+                ThreadForClienWork.Start(tcpClient);
             }
         }
 
         public void Process(dynamic tmp)
         {
             using var client = tmp as TcpClient;
-            _networkStream = client.GetStream();
+            NetworkStream = client.GetStream();
             string message;
 
             while (true)
@@ -59,13 +55,13 @@ namespace Chat.Models.ServerSide
             var builder = new StringBuilder();
             do
             {
-                var data = new byte[_streamBufferSize];
-                int bytes = _networkStream.Read(data, 0, data.Length);
+                var data = new byte[StreamBufferSize];
+                int bytes = NetworkStream.Read(data, 0, data.Length);
                 builder.Append(Encoding.Unicode.GetString(data, 0, bytes));
             }
-            while (_networkStream.DataAvailable);
+            while (NetworkStream.DataAvailable);
 
-            RecivedMessage?.Invoke(client, builder.ToString());
+            MessageRecived?.Invoke(client, builder.ToString());
             return builder.ToString();
         }
 

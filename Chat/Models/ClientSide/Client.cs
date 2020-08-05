@@ -8,22 +8,19 @@ namespace Chat.Models.ClientSide
 {
     public class Client : NetworkNode
     {
-        private const int _streamBufferSize = 64;
         private TcpClient _client;
-        private NetworkStream _stream;
-        private Thread _process;
 
-        public event Action<TcpClient, string> RecivedMessage;
+        public override event Action<TcpClient, string> MessageRecived;
 
         public Client(string localHostIp, int localHostPort) : base(localHostIp, localHostPort)
         {
             _client = new TcpClient();
-            _client.Connect(LocalHostIp, LocalHostPort);
+            _client.Connect(LocalHostIP, LocalHostPort);
 
-            _stream = _client.GetStream();
+            NetworkStream = _client.GetStream();
 
-            _process = new Thread(ReceiveMessage);
-            _process.Start();
+            ThreadForClienWork = new Thread(ReceiveMessage);
+            ThreadForClienWork.Start();
         }
 
         public void SendMessage(string message)
@@ -45,20 +42,20 @@ namespace Chat.Models.ClientSide
         {
             while (true)
             {
-                byte[] data = new byte[_streamBufferSize];
+                byte[] data = new byte[StreamBufferSize];
                 StringBuilder builder = new StringBuilder();
                 int bytes = 0;
                 do
                 {
-                    if (_stream.CanRead)
+                    if (NetworkStream.CanRead)
                     {
-                        bytes = _stream.Read(data, 0, data.Length);
+                        bytes = NetworkStream.Read(data, 0, data.Length);
                         builder.Append(Encoding.Unicode.GetString(data, 0, bytes));
                     }
 
                 }
-                while (_stream.DataAvailable);
-                RecivedMessage?.Invoke(_client, builder.ToString());
+                while (NetworkStream.DataAvailable);
+                MessageRecived?.Invoke(_client, builder.ToString());
             }
         }
 
