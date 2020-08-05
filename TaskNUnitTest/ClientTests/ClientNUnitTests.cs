@@ -9,8 +9,15 @@ namespace TaskNUnitTest.ClientTests
     /// <summary>Testing methods of <see cref="Client"/> class</summary>
     class ClientNUnitTests
     {
+        /// <summary>
+        /// Testing <see cref="Client.SendMessage(string)"/ method>
+        /// </summary>
+        /// <param name="serverLocalHostIp">Server IP address</param>
+        /// <param name="serverPort">Server port number</param>
+        /// <param name="expectedMessage">Send message</param>
         [TestCase("127.0.0.1", 8888, "Первое тестовое сообщение")]
         [TestCase("127.0.0.2", 8080, "Второе тестовое сообщение")]
+        [Description("Testing SendMessageToServer method")]
         public void SendMessageToServer_PositiveTestResult(string serverLocalHostIp, int serverPort, string expectedMessage)
         {
             ClientMessagesStorage messageStorage = new ClientMessagesStorage();
