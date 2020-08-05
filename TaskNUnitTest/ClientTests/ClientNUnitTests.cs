@@ -9,9 +9,7 @@ namespace TaskNUnitTest.ClientTests
     /// <summary>Testing methods of <see cref="Client"/> class</summary>
     class ClientNUnitTests
     {
-        /// <summary>
-        /// Testing <see cref="Client.SendMessage(string)"/ method>
-        /// </summary>
+        /// <summary>Testing <see cref="Client.SendMessage(string)"/ method></summary>
         /// <param name="serverLocalHostIp">Server IP address</param>
         /// <param name="serverPort">Server port number</param>
         /// <param name="expectedMessage">Send message</param>

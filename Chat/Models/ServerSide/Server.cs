@@ -50,9 +50,7 @@ namespace Chat.Models.ServerSide
             }
         }
 
-        /// <summary>
-        /// Receiving messages from clients
-        /// </summary>
+        /// <summary>Receiving messages from clients</summary>
         /// <param name="tcpClient">The client from which the message is received</param>
         /// <remarks>Executed in <see cref="NetworkNode.ThreadForReceivingMessages"/></remarks>
         public void MessageReceivingProcess(dynamic tcpClient)
@@ -67,8 +65,7 @@ namespace Chat.Models.ServerSide
             }
         }
 
-        /// <summary>
-        /// Getting a message from <see cref="NetworkNode.NetworkStream"/>/// </summary>
+        /// <summary>Getting a message from <see cref="NetworkNode.NetworkStream"/></summary>
         /// <param name="client"></param>
         /// <returns>Received message</returns>
         private string GetMessage(TcpClient client)
@@ -89,9 +86,7 @@ namespace Chat.Models.ServerSide
             return builder.ToString();
         }
 
-        /// <summary>
-        /// Sending a message to all server clients
-        /// </summary>
+        /// <summary>Sending a message to all server clients</summary>
         /// <param name="message">Send messages</param>
         public void BroadcastMessage(string message)
         {
