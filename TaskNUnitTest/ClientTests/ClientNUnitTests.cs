@@ -17,7 +17,7 @@ namespace TaskNUnitTest.ClientTests
         /// <param name="expectedMessage">Send message</param>
         [TestCase("127.0.0.1", 8888, "Первое тестовое сообщение")]
         [TestCase("127.0.0.2", 8080, "Второе тестовое сообщение")]
-        [Description("Testing SendMessageToServer method")]
+        [Description("Testing SendMessageToServer method and handling MessageRecived event using a lambda expression")]
         public void SendMessageToServer_PositiveTestResult(string serverLocalHostIp, int serverPort, string expectedMessage)
         {
             ClientMessagesStorage messageStorage = new ClientMessagesStorage();
