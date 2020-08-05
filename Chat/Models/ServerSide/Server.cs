@@ -17,7 +17,7 @@ namespace Chat.Models.ServerSide
 
         public Server(string localHostIp, int localHostPort) : base(localHostIp, localHostPort)
         {
-            _tcpListener = new TcpListener(IPAddress.Parse(LocalHostIP), LocalHostPort);
+            _tcpListener = new TcpListener(LocalHostIP, LocalHostPort);
             _tcpClients = new List<TcpClient>();
 
             _tcpListener.Start();
@@ -33,8 +33,8 @@ namespace Chat.Models.ServerSide
                 TcpClient tcpClient = _tcpListener.AcceptTcpClient();
                 _tcpClients.Add(tcpClient);
 
-                ThreadForClienWork = new Thread(Process);
-                ThreadForClienWork.Start(tcpClient);
+                ThreadForWorkWithClient = new Thread(Process);
+                ThreadForWorkWithClient.Start(tcpClient);
             }
         }
 

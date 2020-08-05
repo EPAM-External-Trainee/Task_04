@@ -1,5 +1,6 @@
 ﻿using Chat.Interfaces;
 using System;
+using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
@@ -9,19 +10,19 @@ namespace Chat.Abstract
     {
         protected const int StreamBufferSize = 64;
 
-        protected NetworkNode(string ip, int port)
+        protected NetworkNode(string localIPAddress, int port)
         {
-            LocalHostIP = ip;
+            LocalHostIP = IPAddress.Parse(localIPAddress);
             LocalHostPort = port;
         }
 
-        protected string LocalHostIP { get; set; }
+        protected IPAddress LocalHostIP { get; set; }
 
         protected int LocalHostPort { get; set; }
 
         protected NetworkStream NetworkStream { get; set; }
 
-        protected Thread ThreadForClienWork { get; set; }
+        protected Thread ThreadForWorkWithClient { get; set; }
 
         public abstract event Action<TcpClient, string> MessageRecived;
     }

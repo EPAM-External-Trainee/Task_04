@@ -19,8 +19,8 @@ namespace Chat.Models.ClientSide
 
             NetworkStream = _client.GetStream();
 
-            ThreadForClienWork = new Thread(ReceiveMessage);
-            ThreadForClienWork.Start();
+            ThreadForWorkWithClient = new Thread(ReceiveMessage);
+            ThreadForWorkWithClient.Start();
         }
 
         public void SendMessage(string message)

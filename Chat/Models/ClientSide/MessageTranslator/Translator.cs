@@ -1,4 +1,5 @@
 ﻿using Chat.Enums;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -99,11 +100,12 @@ namespace Chat.Models.ClientSide.MessageTranslator
 
             foreach (var pair in this)
             {
-                switch (currentLanguage)
+                builderString = currentLanguage switch
                 {
-                    case Language.English: builderString = builderString.Replace(pair.Value, pair.Key); break;
-                    case Language.Russian: builderString = builderString.Replace(pair.Key, pair.Value); break;
-                }
+                    Language.English => builderString.Replace(pair.Value, pair.Key),
+                    Language.Russian => builderString.Replace(pair.Key, pair.Value),
+                    _ => throw new NotSupportedException()
+                };
             }
             return builderString.ToString();
         }
