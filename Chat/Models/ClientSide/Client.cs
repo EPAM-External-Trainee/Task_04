@@ -51,7 +51,6 @@ namespace Chat.Models.ClientSide
                         bytes = NetworkStream.Read(data, 0, data.Length);
                         builder.Append(Encoding.Unicode.GetString(data, 0, bytes));
                     }
-
                 }
                 while (NetworkStream.DataAvailable);
                 MessageRecived?.Invoke(_client, builder.ToString());
