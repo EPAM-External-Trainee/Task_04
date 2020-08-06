@@ -19,12 +19,10 @@ namespace Chat.Models.ServerSide
         /// <summary>Field for storing <see cref="Thread"/> that will be used to listen for incoming connection requests</summary>
         private Thread _threadForListeningProcess;
 
-        /// <summary><inheritdoc cref="NetworkNode.MessageRecived"/></summary>
+        /// <inheritdoc cref="NetworkNode.MessageRecived"/>
         public override event Action<TcpClient, string> MessageRecived;
 
-        /// <summary><inheritdoc cref="NetworkNode(string, int)"/></summary>
-        /// <param name="localHostIp"></param>
-        /// <param name="localHostPort"></param>
+        /// <inheritdoc cref="NetworkNode(string, int)"/>
         public Server(string localHostIp, int localHostPort) : base(localHostIp, localHostPort)
         {
             _server = new TcpListener(LocalHostIP, LocalHostPort);
@@ -102,10 +100,13 @@ namespace Chat.Models.ServerSide
             throw new Exception("Сurrently there are no connected clients on the server");
         }
 
+        /// <inheritdoc cref="object.ToString"/>
         public override bool Equals(object obj) => obj is Server server && server.LocalHostIP == LocalHostIP && LocalHostPort == server.LocalHostPort;
 
+        /// <inheritdoc cref="object.Equals(object)"/>
         public override int GetHashCode() => HashCode.Combine(LocalHostIP, LocalHostPort, NetworkStream, ThreadForReceivingMessages, _server, _tcpClients, _threadForListeningProcess);
 
+        /// <inheritdoc cref="object.GetHashCode"/>
         public override string ToString() => $"Network node: {GetType().Name}, IP address: {LocalHostIP}, host number: {LocalHostPort}.";
     }
 }

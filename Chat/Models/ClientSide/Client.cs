@@ -1,7 +1,5 @@
 ﻿using Chat.Abstract;
 using System;
-using System.Collections.Generic;
-using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -14,10 +12,10 @@ namespace Chat.Models.ClientSide
         /// <summary>Field for storing <see cref="TcpClient"/> object</summary>
         private TcpClient _client;
 
-        /// <summary><inheritdoc cref="NetworkNode.MessageRecived"/></summary>
+        /// <inheritdoc cref="NetworkNode.MessageRecived"/>
         public override event Action<TcpClient, string> MessageRecived;
 
-        /// <summary><inheritdoc cref="NetworkNode(string, int)"/></summary>
+        /// <inheritdoc cref="NetworkNode(string, int)"/>
         public Client(string localHostIp, int localHostPort) : base(localHostIp, localHostPort)
         {
             _client = new TcpClient();
@@ -59,10 +57,13 @@ namespace Chat.Models.ClientSide
             }
         }
 
+        /// <inheritdoc cref="object.ToString"/>
         public override string ToString() => $"Network node: {GetType().Name}, IP address: {LocalHostIP}, host number: {LocalHostPort}.";
 
+        /// <inheritdoc cref="object.Equals(object)"/>
         public override bool Equals(object obj) => obj is Client client && LocalHostIP == client.LocalHostIP && LocalHostPort == client.LocalHostPort;
 
+        /// <inheritdoc cref="object.GetHashCode"/>
         public override int GetHashCode() => HashCode.Combine(LocalHostIP, LocalHostPort, NetworkStream, ThreadForReceivingMessages, _client);
     }
 }
