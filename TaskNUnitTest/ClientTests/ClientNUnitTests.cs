@@ -8,25 +8,34 @@ namespace TaskNUnitTest.ClientTests
 {
     /// <summary>Testing methods of <see cref="Client"/> class</summary>
     [TestFixture]
-    class ClientNUnitTests
+    public class ClientNUnitTests
     {
+        private Server _server;
+        private ClientMessagesStorage _messageStorage;
+        private const string serverIP = "127.0.0.1";
+        private const int serverPort = 8888;
+
+        [OneTimeSetUp]
+        public void Init()
+        {
+            _server = new Server(serverIP, serverPort);
+            _messageStorage = new ClientMessagesStorage();
+        }
+
         /// <summary>Testing <see cref="Client.SendMessage(string)"/ method></summary>
         /// <param name="serverLocalHostIp">Server IP address</param>
         /// <param name="serverPort">Server port number</param>
         /// <param name="expectedMessage">Send message</param>
         [TestCase("127.0.0.1", 8888, "Первое тестовое сообщение")]
-        [TestCase("127.0.0.2", 8080, "Второе тестовое сообщение")]
+        [TestCase("127.0.0.1", 8888, "Второе тестовое сообщение")]
         [Description("Testing SendMessageToServer method and handling MessageRecived event using a lambda expression")]
         public void SendMessageToServer_PositiveTestResult(string serverLocalHostIp, int serverPort, string expectedMessage)
         {
-            ClientMessagesStorage messageStorage = new ClientMessagesStorage();
-            Server server = new Server(serverLocalHostIp, serverPort);
             Client chatClient = new Client(serverLocalHostIp, serverPort);
-
-            server.MessageRecived += (client, message) =>
+            _server.MessageRecived += (client, message) =>
             {
-                messageStorage.AddMessage(client, message);
-                Assert.AreEqual(expectedMessage, messageStorage.AllClientMessages.First());
+                _messageStorage.AddMessage(client, message);
+                Assert.AreEqual(expectedMessage, _messageStorage.AllClientMessages.First());
             };
 
             chatClient.SendMessage(expectedMessage);
