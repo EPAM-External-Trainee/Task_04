@@ -41,14 +41,13 @@ namespace Chat.Models.ClientSide
         {
             while (true)
             {
-                byte[] data = new byte[StreamBufferSize];
-                StringBuilder builder = new StringBuilder();
-                int bytes = 0;
+                var builder = new StringBuilder();
                 do
                 {
                     if (NetworkStream.CanRead)
                     {
-                        bytes = NetworkStream.Read(data, 0, data.Length);
+                        byte[] data = new byte[StreamBufferSize];
+                        int bytes = NetworkStream.Read(data, 0, data.Length);
                         builder.Append(Encoding.Unicode.GetString(data, 0, bytes));
                     }
                 }
