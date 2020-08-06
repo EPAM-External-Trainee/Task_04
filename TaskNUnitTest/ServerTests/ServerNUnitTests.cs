@@ -7,6 +7,7 @@ using System.Net.Sockets;
 namespace TaskNUnitTest
 {
     /// <summary>Testing methods of <see cref="Server"/> class</summary>
+    [TestFixture]
     public class ServerNUnitTests
     {
         /// <summary>Testing <see cref="Server.BroadcastMessage(string)"/ method></summary>

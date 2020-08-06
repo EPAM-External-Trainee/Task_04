@@ -7,6 +7,7 @@ using System.Linq;
 namespace TaskNUnitTest.ClientTests
 {
     /// <summary>Testing methods of <see cref="Client"/> class</summary>
+    [TestFixture]
     class ClientNUnitTests
     {
         /// <summary>Testing <see cref="Client.SendMessage(string)"/ method></summary>
