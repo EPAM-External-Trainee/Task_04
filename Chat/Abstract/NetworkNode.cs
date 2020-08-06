@@ -33,7 +33,7 @@ namespace Chat.Abstract
         /// <summary>Thread for receving client messages</summary>
         protected Thread ThreadForReceivingMessages { get; set; }
 
-        /// <summary><inheritdoc cref="IMessageRecivedNotifier.MessageRecived"/></summary>
+        ///<inheritdoc cref="IMessageRecivedNotifier.MessageRecived"/>
         public abstract event Action<TcpClient, string> MessageRecived;        
     }
 }
