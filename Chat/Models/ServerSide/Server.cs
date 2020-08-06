@@ -22,7 +22,7 @@ namespace Chat.Models.ServerSide
         /// <summary><inheritdoc cref="NetworkNode.MessageRecived"/></summary>
         public override event Action<TcpClient, string> MessageRecived;
 
-        /// <summary><inheritdoc cref="NetworkNode.NetworkNode(string, int)"/></summary>
+        /// <summary><inheritdoc cref="NetworkNode(string, int)"/></summary>
         /// <param name="localHostIp"></param>
         /// <param name="localHostPort"></param>
         public Server(string localHostIp, int localHostPort) : base(localHostIp, localHostPort)
@@ -101,5 +101,11 @@ namespace Chat.Models.ServerSide
             }
             throw new Exception("Сurrently there are no connected clients on the server");
         }
+
+        public override bool Equals(object obj) => obj is Server server && server.LocalHostIP == LocalHostIP && LocalHostPort == server.LocalHostPort;
+
+        public override int GetHashCode() => HashCode.Combine(LocalHostIP, LocalHostPort, NetworkStream, ThreadForReceivingMessages, _server, _tcpClients, _threadForListeningProcess);
+
+        public override string ToString() => $"Network node: {GetType().Name}, IP address: {LocalHostIP}, host number: {LocalHostPort}.";
     }
 }

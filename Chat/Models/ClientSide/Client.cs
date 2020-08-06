@@ -15,7 +15,7 @@ namespace Chat.Models.ClientSide
         /// <summary><inheritdoc cref="NetworkNode.MessageRecived"/></summary>
         public override event Action<TcpClient, string> MessageRecived;
 
-        /// <summary><inheritdoc cref="NetworkNode.NetworkNode(string, int)"/></summary>
+        /// <summary><inheritdoc cref="NetworkNode(string, int)"/></summary>
         public Client(string localHostIp, int localHostPort) : base(localHostIp, localHostPort)
         {
             _client = new TcpClient();
@@ -56,5 +56,7 @@ namespace Chat.Models.ClientSide
                 MessageRecived?.Invoke(_client, builder.ToString());
             }
         }
+
+        public override string ToString() => $"Network node: {GetType().Name}, IP address: {LocalHostIP}, host number: {LocalHostPort}.";
     }
 }
