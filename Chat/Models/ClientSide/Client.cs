@@ -1,5 +1,7 @@
 ﻿using Chat.Abstract;
 using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -58,5 +60,9 @@ namespace Chat.Models.ClientSide
         }
 
         public override string ToString() => $"Network node: {GetType().Name}, IP address: {LocalHostIP}, host number: {LocalHostPort}.";
+
+        public override bool Equals(object obj) => obj is Client client && LocalHostIP == client.LocalHostIP && LocalHostPort == client.LocalHostPort;
+
+        public override int GetHashCode() => HashCode.Combine(LocalHostIP, LocalHostPort, NetworkStream, ThreadForReceivingMessages, _client);
     }
 }
