@@ -6,11 +6,11 @@ using System.Linq;
 
 namespace TaskNUnitTest.ClientTests
 {
-    /// <summary>Testing methods of <see cref="Client"/> class</summary>
+    /// <summary>Testing methods of <see cref="ServerClient"/> class</summary>
     class ClientNUnitTests
     {
         /// <summary>
-        /// Testing <see cref="Client.SendMessage(string)"/ method>
+        /// Testing <see cref="ServerClient.SendMessage(string)"/ method>
         /// </summary>
         /// <param name="serverLocalHostIp">Server IP address</param>
         /// <param name="serverPort">Server port number</param>
@@ -22,7 +22,7 @@ namespace TaskNUnitTest.ClientTests
         {
             ClientMessagesStorage messageStorage = new ClientMessagesStorage();
             Server server = new Server(serverLocalHostIp, serverPort);
-            Client chatClient = new Client(serverLocalHostIp, serverPort);
+            ServerClient chatClient = new ServerClient(serverLocalHostIp, serverPort);
 
             server.MessageRecived += (client, message) =>
             {

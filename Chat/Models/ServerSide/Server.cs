@@ -1,4 +1,7 @@
 ﻿using Chat.Abstract;
+using Chat.Models.ClientSide;
+using Chat.MyConverters;
+using Chat.Structs;
 using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
@@ -20,7 +23,7 @@ namespace Chat.Models.ServerSide
         private Thread _threadForListeningProcess;
 
         /// <summary><inheritdoc cref="NetworkNode.MessageRecived"/></summary>
-        public override event Action<TcpClient, string> MessageRecived;
+        public override event Action<Client, ClientMessage> MessageRecived;
 
         /// <summary><inheritdoc cref="NetworkNode.NetworkNode(string, int)"/></summary>
         /// <param name="localHostIp"></param>
@@ -63,30 +66,30 @@ namespace Chat.Models.ServerSide
 
             while (true)
             {
-                message = GetMessage(client);
+                message = GetMessage();
             }
         }
 
         /// <summary>
-        /// Getting a message from <see cref="NetworkNode.NetworkStream"/>/// </summary>
+        /// Getting a message from <see cref="NetworkNode.NetworkStream"/></summary>
         /// <param name="client"></param>
         /// <returns>Received message</returns>
-        private string GetMessage(TcpClient client)
+        private string GetMessage()
         {
-            var builder = new StringBuilder();
+            var clientMessage = new ClientMessage();
             do
             {
                 if (NetworkStream.CanRead)
                 {
                     var data = new byte[StreamBufferSize];
                     int bytes = NetworkStream.Read(data, 0, data.Length);
-                    builder.Append(Encoding.Unicode.GetString(data, 0, bytes));
+                    MyConverter.GetClientMessageFromBytes(data, ref clientMessage);
                 }
             }
             while (NetworkStream.DataAvailable);
 
-            MessageRecived?.Invoke(client, builder.ToString());
-            return builder.ToString();
+            MessageRecived?.Invoke(client, clientMessage);
+            return clientMessage.Message;
         }
 
         /// <summary>

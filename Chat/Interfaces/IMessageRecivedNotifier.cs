@@ -1,5 +1,6 @@
-﻿using System;
-using System.Net.Sockets;
+﻿using Chat.Models.ClientSide;
+using Chat.Structs;
+using System;
 
 namespace Chat.Interfaces
 {
@@ -7,6 +8,6 @@ namespace Chat.Interfaces
     public interface IMessageRecivedNotifier
     {
         /// <summary>Event when a node receives a message</summary>
-        event Action<TcpClient, string> MessageRecived;
+        event Action<Client, ClientMessage> MessageRecived;
     }
 }

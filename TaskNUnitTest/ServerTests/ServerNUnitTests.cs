@@ -23,7 +23,7 @@ namespace TaskNUnitTest
         {
             Translator traslator = new Translator();
             Server server = new Server(serverLocalHostIp, serverPort);
-            Client client = new Client(serverLocalHostIp, serverPort);
+            ServerClient client = new ServerClient(serverLocalHostIp, serverPort);
 
             client.MessageRecived += delegate(TcpClient client, string message)
             {

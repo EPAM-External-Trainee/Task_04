@@ -1,4 +1,6 @@
 ﻿using Chat.Interfaces;
+using Chat.Models.ClientSide;
+using Chat.Structs;
 using System;
 using System.Net;
 using System.Net.Sockets;
@@ -34,6 +36,6 @@ namespace Chat.Abstract
         protected Thread ThreadForReceivingMessages { get; set; }
 
         /// <summary><inheritdoc cref="IMessageRecivedNotifier.MessageRecived"/></summary>
-        public abstract event Action<TcpClient, string> MessageRecived;
+        public abstract event Action<Client, ClientMessage> MessageRecived;
     }
 }

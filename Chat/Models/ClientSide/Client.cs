@@ -1,60 +1,31 @@
-﻿using Chat.Abstract;
+﻿using Chat.Structs;
 using System;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading;
 
 namespace Chat.Models.ClientSide
 {
-    /// <summary>Сlass that describes the TCP client functionality</summary>
-    public class Client : NetworkNode
+    public class Client
     {
-        /// <summary>Field for storing <see cref="TcpClient"/> object</summary>
-        private TcpClient _client;
+        private readonly ServerClient _serverClient;
 
-        /// <summary><inheritdoc cref="NetworkNode.MessageRecived"/></summary>
-        public override event Action<TcpClient, string> MessageRecived;
-
-        /// <summary><inheritdoc cref="NetworkNode.NetworkNode(string, int)"/></summary>
-        public Client(string localHostIp, int localHostPort) : base(localHostIp, localHostPort)
+        public Client(string localHostIp, int localHostPort, int id, string nickname)
         {
-            _client = new TcpClient();
-            _client.Connect(LocalHostIP, LocalHostPort);
-
-            NetworkStream = _client.GetStream();
-
-            ThreadForReceivingMessages = new Thread(MessageReceivingProcess);
-            ThreadForReceivingMessages.Start();
+            _serverClient = new ServerClient(localHostIp, localHostPort);
+            ID = id;
+            Nickname = nickname;
         }
 
-        /// <summary>Sending a message to the server</summary>
-        /// <param name="message">Send message</param>
+        public int ID { get; private set; }
+
+        public string Nickname { get; private set; }
+        
         public void SendMessage(string message)
         {
-            byte[] data = Encoding.Unicode.GetBytes(message);
-            _client?.GetStream().Write(data, 0, data.Length);
+            ClientMessage clientMessage = new ClientMessage(Guid.NewGuid().ToString(), message, DateTime.Now);
+            _serverClient.SendMessage(this, clientMessage);
         }
 
-        /// <summary>Receiving a message from the server</summary>
-        /// <remarks>Executed in <see cref="NetworkNode.ThreadForReceivingMessages"/>thread</remarks>
-        public void MessageReceivingProcess()
-        {
-            while (true)
-            {
-                byte[] data = new byte[StreamBufferSize];
-                StringBuilder builder = new StringBuilder();
-                int bytes = 0;
-                do
-                {
-                    if (NetworkStream.CanRead)
-                    {
-                        bytes = NetworkStream.Read(data, 0, data.Length);
-                        builder.Append(Encoding.Unicode.GetString(data, 0, bytes));
-                    }
-                }
-                while (NetworkStream.DataAvailable);
-                MessageRecived?.Invoke(_client, builder.ToString());
-            }
-        }
+        public void AddSubToEvent(Action<Client, ClientMessage> action) => _serverClient.MessageRecived += action;
+
+        public void RemvodeSubToEvent(Action<Client, ClientMessage> action) => _serverClient.MessageRecived -= action;
     }
 }
