@@ -55,11 +55,10 @@ namespace Chat.Models.ServerSide
         {
             using var client = tcpClient as TcpClient;
             NetworkStream = client?.GetStream();
-            string message;
 
             while (true)
             {
-                message = GetMessage(client);
+                GetMessage(client);
             }
         }
 
