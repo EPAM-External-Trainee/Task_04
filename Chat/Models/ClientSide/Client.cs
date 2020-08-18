@@ -11,7 +11,7 @@ namespace Chat.Models.ClientSide
     public class Client : NetworkNode, IClient
     {
         /// <summary>Field for storing <see cref="TcpClient"/> object</summary>
-        private TcpClient _client;
+        private readonly TcpClient _client;
 
         /// <inheritdoc cref="NetworkNode.MessageRecived"/>
         public override event Action<TcpClient, string> MessageRecived;

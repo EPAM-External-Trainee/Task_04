@@ -34,6 +34,6 @@ namespace Chat.Abstract
         protected Thread ThreadForReceivingMessages { get; set; }
 
         ///<inheritdoc cref="IMessageRecivedNotifier.MessageRecived"/>
-        public abstract event Action<TcpClient, string> MessageRecived;        
+        public abstract event Action<TcpClient, string> MessageRecived;
     }
 }

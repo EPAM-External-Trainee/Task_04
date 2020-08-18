@@ -12,10 +12,10 @@ namespace Chat.Models.ServerSide
     public class Server : NetworkNode, IServer
     {
         /// <summary>Field for storing <see cref="TcpListener"/> object</summary>
-        private TcpListener _server;
+        private readonly TcpListener _server;
 
         /// <summary>Field for storing connected <see cref="TcpClient"/>'s</summary>
-        private List<TcpClient> _tcpClients;
+        private readonly List<TcpClient> _tcpClients;
 
         /// <summary>Field for storing <see cref="Thread"/> that will be used to listen for incoming connection requests</summary>
         private Thread _threadForListeningProcess;
@@ -82,7 +82,7 @@ namespace Chat.Models.ServerSide
         /// <inheritdoc cref="IServer.BroadcastMessage(string)"/>
         public void BroadcastMessage(string message)
         {
-            if(_tcpClients.Count > 0)
+            if (_tcpClients.Count > 0)
             {
                 byte[] data = Encoding.Unicode.GetBytes(message);
                 foreach (var client in _tcpClients)

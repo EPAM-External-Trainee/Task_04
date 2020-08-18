@@ -11,7 +11,7 @@ namespace Chat.Models.ServerSide.MessageStore
         ///<inheritdoc cref="IClientMessagesStorage.AddMessage(TcpClient, string)"/>
         public void AddMessage(TcpClient tcpClient, string message)
         {
-            if(TryGetValue(tcpClient, out var value))
+            if (TryGetValue(tcpClient, out var value))
             {
                 value.Add(message);
                 return;
