@@ -1,4 +1,5 @@
-﻿using System.Net.Sockets;
+﻿using Chat.Abstract;
+using System.Net.Sockets;
 
 namespace Chat.Interfaces
 {
