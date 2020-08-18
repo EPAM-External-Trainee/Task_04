@@ -1,4 +1,4 @@
-# EPAM_External_Trainee_Task_04_Konstantin_Kapatkov
+# .NET Summer 2020 (external)
 ## Task04. Delegates_Events
 ### Task
 * Develop a class hierarchy for implementing client-server interactions using the TCP / IP Protocol stack.
