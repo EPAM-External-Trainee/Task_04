@@ -33,12 +33,12 @@ namespace TaskNUnitTest
         public void BroadcastMessage_PositiveTestResult(string serverLocalHostIp, int serverPort, string actualMessage, string expectedMessage)
         {
             Client client = new Client(serverLocalHostIp, serverPort);
-            client.MessageRecived += delegate(TcpClient client, string message)
+            client.MessageRecived += delegate (TcpClient client, string message)
             {
                 Assert.AreEqual(expectedMessage, _translator.TranslateMessage(actualMessage));
             };
 
-            _server.BroadcastMessage(expectedMessage);       
+            _server.BroadcastMessage(expectedMessage);
         }
     }
 }

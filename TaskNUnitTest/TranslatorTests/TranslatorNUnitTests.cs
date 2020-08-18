@@ -5,7 +5,7 @@ namespace TaskNUnitTest.TranslatorTests
 {
     /// <summary>Testing methods of <see cref="Translator"/> class</summary>
     [TestFixture]
-    class TranslatorNUnitTests
+    public class TranslatorNUnitTests
     {
         private readonly Translator translator = new Translator();
 
