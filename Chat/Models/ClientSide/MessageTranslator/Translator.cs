@@ -99,9 +99,7 @@ namespace Chat.Models.ClientSide.MessageTranslator
         /// <returns>Current language</returns>
         private Language LanguageDefinition(string message) => !Regex.IsMatch(message, @"\P{IsBasicLatin}") ? Language.English : Language.Russian;
 
-        /// <summary>Translating a message from one <see cref="Language"/> language to another</summary>
-        /// <param name="message">The message you want to translate</param>
-        /// <returns>Translated message</returns>
+        /// <inheritdoc cref="IMessageTranslator.TranslateMessage(string)"/>
         public string TranslateMessage(string message)
         {
             var builderString = new StringBuilder(message);
