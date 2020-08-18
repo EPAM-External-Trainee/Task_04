@@ -1,4 +1,5 @@
 ﻿using Chat.Abstract;
+using Chat.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
@@ -8,7 +9,7 @@ using System.Threading;
 namespace Chat.Models.ServerSide
 {
     /// <summary>Сlass that describes the TCP server functionality</summary>
-    public class Server : NetworkNode
+    public class Server : NetworkNode, IServer
     {
         /// <summary>Field for storing <see cref="TcpListener"/> object</summary>
         private TcpListener _server;
@@ -34,8 +35,7 @@ namespace Chat.Models.ServerSide
             _threadForListeningProcess.Start();
         }
 
-        /// <summary>Method for listening for incoming connection requests</summary>
-        /// <remarks>Executed in <see cref="_threadForListeningProcess"/></remarks>
+        /// <inheritdoc cref="IServer.ListeningProcess"/>
         public void ListeningProcess()
         {
             while (true)
@@ -48,9 +48,7 @@ namespace Chat.Models.ServerSide
             }
         }
 
-        /// <summary>Receiving messages from clients</summary>
-        /// <param name="tcpClient">The client from which the message is received</param>
-        /// <remarks>Executed in <see cref="NetworkNode.ThreadForReceivingMessages"/></remarks>
+        /// <inheritdoc cref="IServer.MessageReceivingProcess(dynamic)"/>
         public void MessageReceivingProcess(dynamic tcpClient)
         {
             using var client = tcpClient as TcpClient;
@@ -62,10 +60,8 @@ namespace Chat.Models.ServerSide
             }
         }
 
-        /// <summary>Getting a message from <see cref="NetworkNode.NetworkStream"/></summary>
-        /// <param name="client"></param>
-        /// <returns>Received message</returns>
-        private string GetMessage(TcpClient client)
+        /// <inheritdoc cref="IServer.GetMessage(TcpClient)"/>
+        public string GetMessage(TcpClient client)
         {
             var builder = new StringBuilder();
             do
@@ -83,8 +79,7 @@ namespace Chat.Models.ServerSide
             return builder.ToString();
         }
 
-        /// <summary>Sending a message to all server clients</summary>
-        /// <param name="message">Send messages</param>
+        /// <inheritdoc cref="IServer.BroadcastMessage(string)"/>
         public void BroadcastMessage(string message)
         {
             if(_tcpClients.Count > 0)

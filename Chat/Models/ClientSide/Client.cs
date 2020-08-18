@@ -1,4 +1,5 @@
 ﻿using Chat.Abstract;
+using Chat.Interfaces;
 using System;
 using System.Net.Sockets;
 using System.Text;
@@ -7,7 +8,7 @@ using System.Threading;
 namespace Chat.Models.ClientSide
 {
     /// <summary>Сlass that describes the TCP client functionality</summary>
-    public class Client : NetworkNode
+    public class Client : NetworkNode, IClient
     {
         /// <summary>Field for storing <see cref="TcpClient"/> object</summary>
         private TcpClient _client;
@@ -27,16 +28,14 @@ namespace Chat.Models.ClientSide
             ThreadForReceivingMessages.Start();
         }
 
-        /// <summary>Sending a message to the server</summary>
-        /// <param name="message">Send message</param>
+        /// <inheritdoc cref="IClient.SendMessage(string)"/>
         public void SendMessage(string message)
         {
             byte[] data = Encoding.Unicode.GetBytes(message);
             _client?.GetStream().Write(data, 0, data.Length);
         }
 
-        /// <summary>Receiving a message from the server</summary>
-        /// <remarks>Executed in <see cref="NetworkNode.ThreadForReceivingMessages"/>thread</remarks>
+        /// <inheritdoc cref="IClient.MessageReceivingProcess"/>
         public void MessageReceivingProcess()
         {
             while (true)

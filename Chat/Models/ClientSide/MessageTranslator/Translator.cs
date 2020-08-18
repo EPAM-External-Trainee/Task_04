@@ -1,4 +1,5 @@
 ﻿using Chat.Enums;
+using Chat.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,7 +8,7 @@ using System.Text.RegularExpressions;
 namespace Chat.Models.ClientSide.MessageTranslator
 {
     /// <summary>Сlass that describes the ability to translate one message to another using some <see cref="Language"/> languages</summary>
-    public class Translator : Dictionary<string, string>
+    public class Translator : Dictionary<string, string>, IMessageTranslator
     {
         /// <summary>Creates a new instance by filling in the dictionary with the necessary data</summary>
         public Translator()

@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using Chat.Interfaces;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 
 namespace Chat.Models.ServerSide.MessageStore
 {
     /// <summary>Class that describes how to store client messages</summary>
-    public class ClientMessagesStorage : Dictionary<TcpClient, List<string>>
+    public class ClientMessagesStorage : Dictionary<TcpClient, List<string>>, IClientMessagesStorage
     {
         /// <summary>Adding a message to the <see cref="Dictionary{TKey, TValue}"/> storage</summary>
         /// <param name="tcpClient">The client whose message will be added</param>
@@ -22,6 +23,6 @@ namespace Chat.Models.ServerSide.MessageStore
         }
 
         /// <summary>Getting all client messages</summary>
-        public List<string> AllClientMessages => this?.SelectMany(pair => pair.Value).ToList();
+        public IEnumerable<string> AllClientMessages => this?.SelectMany(pair => pair.Value);
     }
 }
